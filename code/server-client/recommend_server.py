@@ -92,6 +92,9 @@ def get_features_movieId(r, userId, movieId):
     movie_features["batch2feature_movieId_rating1"] = float(value)  if value else 0
     value = r.get(f"batch2feature_movieId_rating0_{movieId}")
     movie_features["batch2feature_movieId_rating0"] = float(value)  if value else 0
+    value = r.get(f"movieId2movieYear_{movieId}")
+    movie_features['batch2feature_movieId_year'] = float(value) if value else 0
+
     value = r.get(f"streaming2feature_movieId_rating1_{movieId}")
     movie_features["streaming2feature_movieId_rating1"] = float(value)  if value else 0
     value = r.get(f"streaming2feature_movieId_rating0_{movieId}")
@@ -121,7 +124,8 @@ def sort_recall_list_by_model(r,userId,recalls,coefficients,intercept):
         movie_features = get_features_movieId(r, userId, movieId)
         user_movie_features = get_userId2movieId(r,userId,movieId)
         # print(f"movie_features={movieId}:{movie_features},{user_movie_features}")
-        features = [0 for i in range(10)]
+        # features = [0 for i in range(10)]
+        features = [0 for i in range(11)]
         # 批式：5维
         features[0],features[1] = user_features['batch2feature_userId_rating1'],user_features['batch2feature_userId_rating0']
         features[2],features[3] = movie_features['batch2feature_movieId_rating1'],movie_features['batch2feature_movieId_rating0']
@@ -130,6 +134,8 @@ def sort_recall_list_by_model(r,userId,recalls,coefficients,intercept):
         features[5],features[6] = user_features['streaming2feature_userId_rating1'],user_features['streaming2feature_userId_rating1']
         features[7],features[8] = movie_features['streaming2feature_movieId_rating1'],movie_features['streaming2feature_movieId_rating0']
         features[9] = user_movie_features[f'streaming2feature_userId_to_movieId']
+        # 新增：1维（年份）
+        features[10] =  movie_features['batch2feature_movieId_year']
         features = np.array(features)
         # print(features)
         # 模型计算
@@ -146,6 +152,8 @@ def get_recommend_list(redis,userId):
     recall_list += get_popular_list(r)
     #   （2）载入最喜欢的list
     recall_list += get_liking_genre_list(r,userId)
+    #     (3)协同过滤模型的list
+    # recall_list += get_xt_list(r,userId)
     recall_list = list(set(recall_list)) # 去重
     # print(recall_list)
     # 2. 排序

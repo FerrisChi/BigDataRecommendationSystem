@@ -154,6 +154,15 @@ object recommend {
         }
       }
       features = features :+ sum
+
+      val yearkey = s"movieId2movieYear_${movieId}"
+      features = features :+ {
+        if (jedis.exists(yearkey)) {
+          jedis.get(yearkey).toDouble
+        } else
+          0
+      }
+
       data = data :+ (rating, Vectors.dense(features.toArray))
     }
     jedis.close()

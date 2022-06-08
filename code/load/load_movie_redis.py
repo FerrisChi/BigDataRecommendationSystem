@@ -11,8 +11,9 @@ import redis
 import random
 import json
 
-def redis_connect(host="bd", port=6379):    
+def redis_connect(host="121.36.88.159", port=6379):    
     pool = redis.ConnectionPool(host=host,port=port,decode_responses=True)
+    print(f'Connect to {host} succeed.')
     return pool
 
 def getArgs():
@@ -36,8 +37,10 @@ if __name__=='__main__':
         # 向hbase中写入
 
         # 向redis中写入
-        print(nowl[0],nowl[1])
+        print(nowl[0], nowl[1], nowl[3])
         r = redis.Redis(connection_pool=redis_pool)
+        r.delete(f"movieId2movieYear_{nowl[0]}")
+        r.set(f"movieId2movieYear_{nowl[0]}", nowl[3])
         r.delete(f"movieId2movieTitle_{nowl[0]}")
         r.set(f"movieId2movieTitle_{nowl[0]}",str(nowl[1]))
         genres = []

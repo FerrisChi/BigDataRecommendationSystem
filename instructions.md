@@ -4,7 +4,7 @@
 
 1. 启动HDFS
 
-   `	start-all.sh`
+   `start-all.sh`
 
 2. 启动zookeeper（*）
 
@@ -22,24 +22,31 @@
 
    `create 'movie_records','details'`
 
+   * 查看HBase数据：`scan 'movie_records',{LIMIT=>5}` 查看movie_records表的前5行
+
 6. 启动load_train_ratings_hbase.py（init）
 
    `python .\load_train_ratings_hbase.py 121.36.88.159 9090 "movie_records" "../../data/json_train_ratings.json"`
 
 7.  启动redis
 
-   `redis-server redis-6.0.6/redis.conf`
+   `redis-server /root/redis-6.0.6/redis.conf`
 
-   * 查看数据：
+   * 查看redis数据：
 
      * 进入redis
        `redis-cli -h 127.0.0.1 -p 6379`
 
      * 查看redis中的key
-       `keys 【pattern】`
+       `keys [pattern]`
+       e.g.: `keys *` （查看所有的keys）
+      
+     * 获取key对应的value
+       `get [key]`
+       e.g.: `get 'movieId2movieTitle_1'`
 
-     * 查看redis中的表
-       `lrange 【表的名字】 0 -1`
+     * 查看redis中的表(list)
+       `lrange [表的名字] 0 -1`
 
 8. 启动load_movie_redis.py（init）
 
@@ -59,25 +66,25 @@
 
     最好在服务器上运行，若要本地Windows/macOS运行，需额外配置kafka外网连接
 
-    `python3 generatorRecord.py -h node001:9092  -f "../../data/json_test_ratings.json"`
+    `python3 /root/code/load/generatorRecord.py -h node001:9092  -f "/root/data/json_test_ratings.json"`
 
 12. 启动hbase2spark、kafkaStreaming、recommend
 
-    * `spark-submit --class hbase2spark --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 spark-sparkstreaming-recommend.jar`
-    * `spark-submit --class kafkaStreaming --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 spark-sparkstreaming-recommend.jar`
-    * `spark-submit --class recommend --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 spark-sparkstreaming-recommend.jar`
+    * `spark-submit --class hbase2spark --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 /root/spark-sparkstreaming-recommend.jar`
+    * `spark-submit --class kafkaStreaming --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 /root/spark-sparkstreaming-recommend.jar`
+    * `spark-submit --class recommend --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 /root/spark-sparkstreaming-recommend.jar`
 
 13. 启动recommend_server.py
 
     可在本地执行
 
-    `python recommend_server.py "121.36.88.159" 6379 23456`
+    `python code/server-client/recommend_server.py "121.36.88.159" 6379 23456`
 
 14. 启动recommend_client.py
 
     可在本地执行
 
-    `python recommend_client.py 127.0.0.1 23456`
+    `python code/server-client/recommend_client.py 127.0.0.1 23456`
 
 
 
