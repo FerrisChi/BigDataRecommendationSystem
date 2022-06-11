@@ -40,7 +40,7 @@
      * 查看redis中的key
        `keys [pattern]`
        e.g.: `keys *` （查看所有的keys）
-      
+     
      * 获取key对应的value
        `get [key]`
        e.g.: `get 'movieId2movieTitle_1'`
@@ -57,6 +57,8 @@
 9. 启动Kafka（*）
 
    `kafka-server-start.sh /home/modules/kafka_2.11-0.10.2.2/config/server.properties`
+
+   * 查看Kafka运行状态：Kafka默认端口为**9092**，可以使用命令：netstat -anlpt | grep 9092 或者 lsof -i:9092 来查看9092端口占用情况
 
 10. 创建 Kafka Topic
 
