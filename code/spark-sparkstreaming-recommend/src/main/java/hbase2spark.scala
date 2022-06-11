@@ -6,6 +6,8 @@ import org.apache.hadoop.hbase.{HBaseConfiguration, HTableDescriptor, TableName}
 import org.apache.hadoop.hbase.client.{HBaseAdmin, HTable}
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark
+import org.apache.spark._
+import org.apache.spark.mllib.recommendation.{ALS, Rating}
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.{SparkConf, SparkContext}
 import redis.clients.jedis.{Jedis, JedisPool, JedisPoolConfig}
