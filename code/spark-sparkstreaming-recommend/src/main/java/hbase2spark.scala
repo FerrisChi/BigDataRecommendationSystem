@@ -85,6 +85,24 @@ object hbase2spark {
         }
         counter
       })
+    
+    //协同过滤模型推荐列表
+    val ratingUserId5MovieId = data.map(x=>Rating(x._2.toInt,x._3.toInt,x._4.toDouble))
+    val rank = 2 //设置隐藏因子
+    val numIterations = 2 //设置迭代次数
+    val model = ALS.train(ratingUserId5MovieId, rank, numIterations, 0.01) //进行模型训练
+    //根据已有数据集建立协同过滤模型后用recommendProducts为第x个用户推荐10个商品
+    val userId5MovieId = data.map(x=>(x._2,model.recommendProducts(x._2.toInt,10)))
+    // 依次输出结果
+    userId5MovieId.foreach(x=> {
+      val jedisIns = new Jedis("node001",6379,100000)
+      jedisIns.del(s"userId_perfer_movieId_${x._1}")
+      for (i <- 0 until 10) {
+        jedisIns.rpush(s"userId_perfer_movieId_${x._1}", x._2(i).toString)
+      }
+      jedisIns.close()
+    })
+
     // 依次输出统计结果
     counterUserIdPos.foreach( x=> {
       val jedisIns = new Jedis("node001",6379,100000)

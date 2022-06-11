@@ -66,6 +66,11 @@ def get_liking_genre_list(r,userId):
     # 再求最喜欢的list
     return [int(x) for x in liking_genre_list]
 
+def get_CF_recommend_list(r,userId):
+    # 得到协同过滤模型推荐列表的list
+    CF_recommend_list = r.lrange(f"userId_perfer_movieId_{userId}",0,-1)
+    return [int(x) for x in CF_recommend_list]
+
 def get_model_arams(redis):
     coefficients = redis.lrange("params_coefficients",0,-1)
     coefficients = [float(x) for x in coefficients]
@@ -153,7 +158,7 @@ def get_recommend_list(redis,userId):
     #   （2）载入最喜欢的list
     recall_list += get_liking_genre_list(r,userId)
     #     (3)协同过滤模型的list
-    # recall_list += get_xt_list(r,userId)
+    recall_list += get_CF_recommend_list(r,userId)
     recall_list = list(set(recall_list)) # 去重
     # print(recall_list)
     # 2. 排序
