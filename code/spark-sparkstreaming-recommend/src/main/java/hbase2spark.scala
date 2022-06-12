@@ -6,6 +6,8 @@ import org.apache.hadoop.hbase.{HBaseConfiguration, HTableDescriptor, TableName}
 import org.apache.hadoop.hbase.client.{HBaseAdmin, HTable}
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark
+import org.apache.spark._
+import org.apache.spark.mllib.recommendation.{ALS, Rating}
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.{SparkConf, SparkContext}
 import redis.clients.jedis.{Jedis, JedisPool, JedisPoolConfig}
@@ -85,7 +87,34 @@ object hbase2spark {
         }
         counter
       })
+
+    //统计 协同过滤模型推荐列表
+    val ratingUserId5MovieId = data.map(x=>{
+      val rating = Rating(x._2.toInt,x._3.toInt,x._4.toDouble)
+      rating
+    })
+    val rank = 2 //设置隐藏因子
+    val numIterations = 2 //设置迭代次数
+    val model = ALS.train(ratingUserId5MovieId, rank, numIterations, 0.01) //进行模型训练
+    val userIds = data.map(x => x._2).distinct().collect()
+    //根据已有数据集建立协同过滤模型后用recommendProducts为用户推荐10个电影
+    println("Calculating CF for"+userIds.length.toString + "users...")
+    val userIdCFMovieId = userIds.map(x => {
+      val products = model.recommendProducts(x, 10)
+      (x,products)
+    })
+    println("Calculating done!")
+
     // 依次输出统计结果
+    val jedisIns = new Jedis("node001",6379,100000)
+    userIdCFMovieId.foreach(x=> {
+      jedisIns.del(s"userId_perfer_movieId_${x._1}")
+      for (i <- 0 until 10) {
+        jedisIns.rpush(s"userId_perfer_movieId_${x._1}", x._2(i).product.toString)
+      }
+    })
+    jedisIns.close()
+
     counterUserIdPos.foreach( x=> {
       val jedisIns = new Jedis("node001",6379,100000)
       jedisIns.set("batch2feature_userId_rating1_"+x._1.toString, x._2.toString)
