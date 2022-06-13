@@ -56,7 +56,7 @@
 
 9. 启动Kafka（*）
 
-   `kafka-server-start.sh /home/modules/kafka_2.11-0.10.2.2/config/server.properties`
+   `kafka-server-start.sh /home/modules/kafka/config/server.properties`
 
    * 查看Kafka运行状态：Kafka默认端口为**9092**，可以使用命令：netstat -anlpt | grep 9092 或者 lsof -i:9092 来查看9092端口占用情况
 
@@ -73,8 +73,19 @@
 12. 启动hbase2spark、kafkaStreaming、recommend
 
     * `spark-submit --class hbase2spark --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 /root/spark-sparkstreaming-recommend.jar`
+
     * `spark-submit --class kafkaStreaming --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 /root/spark-sparkstreaming-recommend.jar`
+
     * `spark-submit --class recommend --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 /root/spark-sparkstreaming-recommend.jar`
+
+    * delta:
+
+      ```
+      spark-submit --class kStream2delta --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 /root/spark-sparkstreaming-recommend_d.jar
+      
+      --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.2.1
+      --packages io.delta:delta-core_2.12:1.2.1
+      ```
 
 13. 启动recommend_server.py
 
