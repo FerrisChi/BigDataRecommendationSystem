@@ -15,7 +15,7 @@ import numpy as np
 from math import e
 
 def redis_connect(host="bd", port=6379):    
-    pool = redis.ConnectionPool(host=host,port=port,decode_responses=True)
+    pool = redis.ConnectionPool(host=host,port=port,decode_responses=True, password='Kd7Jdddd16@6djie8gce342NWM9znN4$V')
     return pool
 
 def getArgs():

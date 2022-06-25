@@ -20,6 +20,8 @@
 
 5. 在HBase中创建对应的表（init）
 
+   输入`hbase shell`进入hbase命令行界面
+
    `create 'movie_records','details'`
 
    * 查看HBase数据：`scan 'movie_records',{LIMIT=>5}` 查看movie_records表的前5行
@@ -28,7 +30,7 @@
 
    `python .\load_train_ratings_hbase.py 121.36.88.159 9090 "movie_records" "../../data/json_train_ratings.json"`
 
-7.  启动redis
+7. 启动redis
 
    `redis-server /root/redis-6.0.6/redis.conf`
 
@@ -60,23 +62,23 @@
 
    * 查看Kafka运行状态：Kafka默认端口为**9092**，可以使用命令：netstat -anlpt | grep 9092 或者 lsof -i:9092 来查看9092端口占用情况
 
-10. 创建 Kafka Topic
+10. 创建 Kafka Topic（init）
 
-    `kafka-topics.sh --zookeeper node001:2181 --create --topic movie_rating_records --partitions 1 --replication-factor 1`
+    `kafka-topics.sh --zookeeper ljj-2019213687-0001:2181 --create --topic movie_rating_records --partitions 1 --replication-factor 1`
 
 11. 启动generatorRecord.py（这个程序会一直运行，不需要等待停止）
 
     最好在服务器上运行，若要本地Windows/macOS运行，需额外配置kafka外网连接
 
-    `python3 /root/code/load/generatorRecord.py -h node001:9092  -f "/root/data/json_test_ratings.json"`
+    `python3 /root/code/load/generatorRecord.py -h ljj-2019213687-0001:9092  -f "/root/data/json_test_ratings.json"`
 
 12. 启动hbase2spark、kafkaStreaming、recommend
 
-    * `spark-submit --class hbase2spark --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 /root/spark-sparkstreaming-recommend.jar`
+    * `spark-submit --class hbase2spark --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 /root/lastExam.jar`
 
-    * `spark-submit --class kafkaStreaming --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 /root/spark-sparkstreaming-recommend.jar`
+    * `spark-submit --class kafkaStreaming --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 /root/lastExam.jar`
 
-    * `spark-submit --class recommend --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 /root/spark-sparkstreaming-recommend.jar`
+    * `spark-submit --class recommend --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 /root/lastExam.jar`
 
     * delta:
 

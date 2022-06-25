@@ -10,11 +10,13 @@
 
   ![image-20220530170403867](images/basic/2.png)
 
+* 将movie.csv导入Redis中：
+
+  ![image-20220625202623540](images/basic/7.png)
+  
 * 执行结果：
 
   ![image-20220530212046012](images/basic/3.png)
-
-## 提高实验：
 
 ## 选做：
 
@@ -25,3 +27,24 @@
 * 验证spark：
 
   ![image-20220611000059034](images/final/2.png)
+  
+* client截图：
+
+  ![image-20220626022503970](images/basic/8.png)
+
+* server截图：（输出了CF model的推荐信息）
+
+  ![image-20220626022548304](images/basic/9.png)
+
+## 提高：
+
+* 版本：
+  * hive-2.1.1
+  * hadoop-2..7.7
+  * hbase-2.0.2 => hbase-2.4.11
+  * kafka-2.11-0.10.22 => 2.12-3.2.0
+  * redis-6.0.6
+  * spark-2.1.1 => 3.2.1
+  * zookeeper => 3.4.6
+
+* 在IJ中将全局库中的scala-sdk更新到2.12.15
