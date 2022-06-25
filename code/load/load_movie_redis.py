@@ -12,7 +12,7 @@ import random
 import json
 
 def redis_connect(host="121.36.88.159", port=6379):    
-    pool = redis.ConnectionPool(host=host,port=port,decode_responses=True)
+    pool = redis.ConnectionPool(host=host,port=port,decode_responses=True,password='Kd7Jdddd16@6djie8gce342NWM9znN4$V')
     print(f'Connect to {host} succeed.')
     return pool
 

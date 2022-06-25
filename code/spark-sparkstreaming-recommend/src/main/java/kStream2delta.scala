@@ -33,7 +33,7 @@ object kStream2delta{
     val df: DataFrame = spark
       .readStream
       .format("kafka")
-      .option("kafka.bootstrap.servers", "node001:9092")
+      .option("kafka.bootstrap.servers", "ljj-2019213687-0001:9092")
       .option("subscribe", "movie_rating_records")
       .option("startingOffsets", "earliest")
       .option("failOnDataLoss", "false")

@@ -95,6 +95,7 @@ object recommend {
   //  }
   def collect_train_data() = {
     val jedis = new Jedis(redis_host,redis_port,redis_timeout)
+    jedisIns.auth("Kd7Jdddd16@6djie8gce342NWM9znN4$V")
     val records_length = jedis.llen("streaming_records")
     var map: mutable.Map[String, Int] = mutable.Map()
     for(i <- 0 to records_length.toInt/2) {
@@ -189,6 +190,7 @@ object recommend {
     val params_coefficients = lrModel.coefficients.toDense.toArray
     println(params_coefficients.mkString("Array(", ", ", ")"))
     val jedis = new Jedis(redis_host,redis_port,redis_timeout)
+    jedisIns.auth("Kd7Jdddd16@6djie8gce342NWM9znN4$V")
     jedis.del("params_coefficients")
     for (i<- params_coefficients.indices)
       jedis.rpush("params_coefficients",params_coefficients(i).toString)
@@ -201,7 +203,7 @@ object recommend {
     val date = dateFormat.format(now)
     date
   }
-  val redis_host:String = "node001"
+  val redis_host:String = "ljj-2019213687-0001"
   val redis_port:Int = 6379
   val redis_timeout:Int = 10000
   def main(args:Array[String]) = {

@@ -31,7 +31,7 @@ object hbase2spark {
       List()
   }
   def batch2feature(sc:SparkContext) {
-    val hbaseconf = getHBaseConfiguration("node001","2181")
+    val hbaseconf = getHBaseConfiguration("ljj-2019213687-0001","2181")
     hbaseconf.set(TableInputFormat.INPUT_TABLE,"movie_records")
     // HBase数据转成RDD
     val hBaseRDD = sc.newAPIHadoopRDD(hbaseconf,classOf[TableInputFormat],
@@ -70,7 +70,8 @@ object hbase2spark {
         var sum = 0
         val one_hot: Array[Int] = new Array[Int](19)
         //        val jedisIns = new JedisIns("bd",6379,100000)
-        val jedisIns:Jedis = new Jedis("node001",6379,100000)
+        val jedisIns:Jedis = new Jedis("ljj-2019213687-0001",6379,100000)
+        jedisIns.auth("Kd7Jdddd16@6djie8gce342NWM9znN4$V")
         for (record<-x) {
           sum=sum+1
           val genres_list = jedisIns.lrange("movie2genres_movieId_" + record.toString,0,-1)
@@ -106,7 +107,8 @@ object hbase2spark {
     println("Calculating done!")
 
     // 依次输出统计结果
-    val jedisIns = new Jedis("node001",6379,100000)
+    val jedisIns = new Jedis("ljj-2019213687-0001",6379,100000)
+    jedisIns.auth("Kd7Jdddd16@6djie8gce342NWM9znN4$V")
     userIdCFMovieId.foreach(x=> {
       jedisIns.del(s"userId_perfer_movieId_${x._1}")
       for (i <- 0 until 10) {
@@ -116,27 +118,32 @@ object hbase2spark {
     jedisIns.close()
 
     counterUserIdPos.foreach( x=> {
-      val jedisIns = new Jedis("node001",6379,100000)
+      val jedisIns = new Jedis("ljj-2019213687-0001",6379,100000)
+      jedisIns.auth("Kd7Jdddd16@6djie8gce342NWM9znN4$V")
       jedisIns.set("batch2feature_userId_rating1_"+x._1.toString, x._2.toString)
       jedisIns.close()
     })
     counterUserIdNeg.foreach( x=> {
-      val jedisIns = new Jedis("node001",6379,100000)
+      val jedisIns = new Jedis("ljj-2019213687-0001",6379,100000)
+      jedisIns.auth("Kd7Jdddd16@6djie8gce342NWM9znN4$V")
       jedisIns.set("batch2feature_userId_rating0_"+x._1.toString, x._2.toString)
       jedisIns.close()
     })
     counterMovieIdPos.foreach( x=> {
-      val jedisIns = new Jedis("node001",6379,100000)
+      val jedisIns = new Jedis("ljj-2019213687-0001",6379,100000)
+      jedisIns.auth("Kd7Jdddd16@6djie8gce342NWM9znN4$V")
       jedisIns.set("batch2feature_movieId_rating1_"+x._1.toString, x._2.toString)
       jedisIns.close()
     })
     counterMovieIdNeg.foreach( x=> {
-      val jedisIns = new Jedis("node001",6379,100000)
+      val jedisIns = new Jedis("ljj-2019213687-0001",6379,100000)
+      jedisIns.auth("Kd7Jdddd16@6djie8gce342NWM9znN4$V")
       jedisIns.set("batch2feature_movieId_rating0_"+x._1.toString, x._2.toString)
       jedisIns.close()
     })
     counterUserId2MovieId.foreach(x=> {
-      val jedisIns = new Jedis("node001",6379,100000)
+      val jedisIns = new Jedis("ljj-2019213687-0001",6379,100000)
+      jedisIns.auth("Kd7Jdddd16@6djie8gce342NWM9znN4$V")
       jedisIns.set(s"batch2feature_userId_to_genresId_${x._1.toString}_${x._2._1}", x._2._2.toString)
       jedisIns.close()
     })
