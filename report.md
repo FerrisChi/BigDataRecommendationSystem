@@ -20,7 +20,7 @@
 
 ## 选做：
 
-* 升级spark版本至3.2.1：可以看到Scala版本为2.12.15
+* (升级spark版本至3.2.1：可以看到Scala版本为2.12.15)
 
   ![image-20220610235431749](images/1.png)
 
@@ -37,6 +37,14 @@
   ![image-20220626022548304](images/basic/9.png)
 
 ## 提高：
+
+* server截图：
+
+  ![image-20220626142707989](images/final/4png)
+
+* client截图：
+
+  ![image-20220626142418978](images/final/3.png)
 
 * 版本：
   * hive-2.1.1

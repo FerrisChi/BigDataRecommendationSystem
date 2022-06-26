@@ -56,6 +56,8 @@
 
    `python .\load_movie_redis.py 121.36.88.159  6379 "../../data/movies.csv"`
 
+   `python .\load_movie_redis.py 121.36.12.46  6379 "../../data/movies.csv"`
+
 9. 启动Kafka（*）
 
    `kafka-server-start.sh /home/modules/kafka/config/server.properties`
@@ -95,13 +97,15 @@
 
     `python code/server-client/recommend_server.py "121.36.88.159" 6379 23456`
 
+    `python code/server-client/recommend_server.py "121.36.12.46" 6379 23456`
+
 14. 启动recommend_client.py
 
     可在本地执行
 
     `python code/server-client/recommend_client.py 127.0.0.1 23456`
 
-
+* 密码：Kd7Jdddd16@6djie8gce342NWM9znN4$V
 
 ## Instructions
 
