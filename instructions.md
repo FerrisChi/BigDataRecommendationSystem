@@ -68,6 +68,18 @@
 
     `kafka-topics.sh --zookeeper ljj-2019213687-0001:2181 --create --topic movie_rating_records --partitions 1 --replication-factor 1`
 
+    * 查看Kafka Topic中的消息数量：
+
+      `kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list ljj-2019213687-0001:9092 --topic movie_rating_records --time -1`
+
+    * 删除kafka topic：
+      `kafka-topics.sh --zookeeper localhost:2181 --delete --topic movie_rating_records`
+
+      清空kafka或某一topic数据：https://www.cnblogs.com/swordfall/p/10014300.html
+
+    * 查看kafka topic：
+      `kafka-topics.sh --list --zookeeper localhost:2181`
+
 11. 启动generatorRecord.py（这个程序会一直运行，不需要等待停止）
 
     最好在服务器上运行，若要本地Windows/macOS运行，需额外配置kafka外网连接
@@ -76,11 +88,11 @@
 
 12. 启动hbase2spark、kafkaStreaming、recommend
 
-    * `spark-submit --class hbase2spark --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 /root/lastExam.jar`
+    * `spark-submit --class hbase2spark --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 /root/cjj/lastExam.jar`
 
-    * `spark-submit --class kafkaStreaming --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 /root/lastExam.jar`
+    * `spark-submit --class kafkaStreaming --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 /root/cjj/lastExam.jar`
 
-    * `spark-submit --class recommend --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 /root/lastExam.jar`
+    * `spark-submit --class recommend --master yarn --num-executors 3 --driver-memory 512m --executor-memory 512m --executor-cores 1 /root/cjj/lastExam.jar`
 
     * delta:
 
@@ -114,7 +126,7 @@
     node001统一修改为自己主节点名称
     spark-sparkstreaming-recommend.jar统一修改为自己的jar包名称
 
-```
+```bash
 #启动HDFS
 /home/modules/hadoop-2.7.7/sbin/start-all.sh
 
