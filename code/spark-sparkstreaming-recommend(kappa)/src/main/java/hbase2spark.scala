@@ -217,28 +217,16 @@ object hbase2spark {
     //    jedisIns.testJedis()
     Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
 
-//    while (true) {
-//      println(s"${NowDate()} [INFO] Begin to calculate batch features")
-//      val sparkConf = new SparkConf().setAppName("HBaseReadTest").setMaster("local[2]")
-////      val sc = new SparkContext(sparkConf)
-//
-//      val sc1:StreamingContext = new StreamingContext(sparkConf, Durations.seconds(30))
-//      batch2feature(sc1)
-//      sc1.start()
-////      sc.stop()
-//      sc1.awaitTermination()
-////      sc1.stop()
-//      println(s"${NowDate()} [INFO] Success!")
-//      sleep(1000*60*5)
-//    }
-
-    println(s"${NowDate()} [INFO] Begin to calculate batch features")
-    val sparkConf = new SparkConf().setAppName("HBaseReadTest").setMaster("local[2]")
-    val sc = new SparkContext(sparkConf)
-    val sc1:StreamingContext = new StreamingContext(sc, Durations.seconds(30))
-    batch2feature(sc, sc1)
-    sc1.start()
-    sc1.awaitTermination()
-    println(s"${NowDate()} [INFO] Success!")
+    while (true) {
+      println(s"${NowDate()} [INFO] Begin to calculate batch features")
+      val sparkConf = new SparkConf().setAppName("HBaseReadTest").setMaster("local[2]")
+      val sc = new SparkContext(sparkConf)
+      val sc1:StreamingContext = new StreamingContext(sc, Durations.seconds(30))
+      batch2feature(sc, sc1)
+      sc1.start()
+      sc1.awaitTermination()
+      sc1.stop()
+      println(s"${NowDate()} [INFO] Success!")
+    }
   }
 }
